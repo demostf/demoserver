@@ -8,7 +8,7 @@
 	},
 	"dependencies": {
 		"express": "~4.9.x",
-		"tf2-demo": "0.2.1"
+		"tf2-demo": "0.2.2"
 	},
 	"engines": {
 		"node": "0.10.x"
