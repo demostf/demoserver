@@ -12,7 +12,7 @@ app.get('/', function (request, response) {
 	response.send('Hello World!');
 });
 
-function handleDataStream(stream, cb) {
+function handleDataStream (stream, cb) {
 	var buffers = [];
 	stream.on('data', function (buffer) {
 		buffers.push(buffer);
@@ -22,7 +22,8 @@ function handleDataStream(stream, cb) {
 		var demo = DemoParser.fromNodeBuffer(buffer);
 		var parser = demo.getParser();
 		var header = parser.readHeader();
-		var body = parser.parseBody();
+		var match = parser.parseBody();
+		var body = match.getState();
 		body.header = header;
 		cb(body);
 	});
