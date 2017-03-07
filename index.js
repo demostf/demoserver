@@ -19,8 +19,8 @@ function handleDataStream (stream, cb) {
 	});
 	stream.on('end', function () {
 		var buffer = Buffer.concat(buffers);
-		var demo = DemoParser.fromNodeBuffer(buffer);
-		var parser = demo.getParser();
+		var demo = DemoParser.Demo.fromNodeBuffer(buffer);
+		var parser = demo.getParser(true);
 		var header = parser.readHeader();
 		var match = parser.parseBody();
 		var body = match.getState();
