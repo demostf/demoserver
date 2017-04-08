@@ -5,7 +5,7 @@ var url = require('url');
 var https = require('https');
 var http = require('http');
 
-app.set('port', (process.env.PORT || 5000));
+app.set('port', (process.env.PORT || 80));
 app.use(express.static(__dirname + '/public'));
 
 app.get('/', function (request, response) {
@@ -18,14 +18,18 @@ function handleDataStream (stream, cb) {
 		buffers.push(buffer);
 	});
 	stream.on('end', function () {
-		var buffer = Buffer.concat(buffers);
-		var demo = DemoParser.Demo.fromNodeBuffer(buffer);
-		var parser = demo.getParser(true);
-		var header = parser.readHeader();
-		var match = parser.parseBody();
-		var body = match.getState();
-		body.header = header;
-		cb(body);
+		try {
+			var buffer = Buffer.concat(buffers);
+			var demo = DemoParser.Demo.fromNodeBuffer(buffer);
+			var parser = demo.getParser(true);
+			var header = parser.readHeader();
+			var match = parser.parseBody();
+			var body = match.getState();
+			body.header = header;
+			cb(body);
+		} catch (e) {
+			cb(e);
+		}
 	});
 }
 
