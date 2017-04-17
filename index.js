@@ -66,3 +66,10 @@ app.post('/url', function (req, res) {
 app.listen(app.get('port'), function () {
 	console.log("Node app is running at localhost:" + app.get('port'));
 });
+
+process.on('SIGINT', function () {
+	process.exit();
+});
+process.on('SIGTERM', function () {
+	process.exit();
+});
