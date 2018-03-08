@@ -1,4 +1,4 @@
-var DemoParser = require('tf2-demo');
+var DemoParser = require('@demostf/demo.js');
 var express = require('express');
 var app = express();
 var url = require('url');
@@ -21,9 +21,9 @@ function handleDataStream (stream, cb, slow) {
 		try {
 			var buffer = Buffer.concat(buffers);
 			var demo = DemoParser.Demo.fromNodeBuffer(buffer);
-			var parser = demo.getParser(!slow);
-			var header = parser.readHeader();
-			var match = parser.parseBody();
+			var parser = demo.getAnalyser(!slow);
+			var header = parser.getHeader();
+			var match = parser.getBody();
 			var body = match.getState();
 			body.header = header;
 			cb(body);
