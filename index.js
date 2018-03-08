@@ -12,7 +12,7 @@ app.get('/', function (request, response) {
 	response.send('Hello World!');
 });
 
-function handleDataStream (stream, cb) {
+function handleDataStream (stream, cb, slow) {
 	var buffers = [];
 	stream.on('data', function (buffer) {
 		buffers.push(buffer);
@@ -21,7 +21,7 @@ function handleDataStream (stream, cb) {
 		try {
 			var buffer = Buffer.concat(buffers);
 			var demo = DemoParser.Demo.fromNodeBuffer(buffer);
-			var parser = demo.getParser(true);
+			var parser = demo.getParser(!slow);
 			var header = parser.readHeader();
 			var match = parser.parseBody();
 			var body = match.getState();
@@ -33,12 +33,19 @@ function handleDataStream (stream, cb) {
 	});
 }
 
+app.post('/parse/slow', function (req, res) {
+  handleDataStream(req, function (body) {
+    res.set('Content-Type', 'application/json');
+    res.write(JSON.stringify(body));
+    res.end();
+  }, true)
+});
 app.post('/parse', function (req, res) {
 	handleDataStream(req, function (body) {
 		res.set('Content-Type', 'application/json');
 		res.write(JSON.stringify(body));
 		res.end();
-	})
+	}, false)
 });
 
 app.post('/url', function (req, res) {
